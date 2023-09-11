@@ -1,0 +1,642 @@
+#------------------------------------------------------------------------------------------------
+# 	Camera File for C10854-02 interfaced by CameraLink
+#------------------------------------------------------------------------------------------------
+
+#------------------------------------------------------------------------------------------------
+# General
+# General.FileVersion = Number(Version of the file)
+# General.LastUpdate  = (Date of Last Update)
+#------------------------------------------------------------------------------------------------
+[General]
+General.FileVersion=121
+General.LastUpdate=2015/01/24
+
+[Camera]
+#------------------------------------------------------------------------------------------------
+# Camera type
+#------------------------------------------------------------------------------------------------
+Camera.Type=C10854
+
+#------------------------------------------------------------------------------------------------
+# Model type
+#	0 = Base model
+#	1 = Standard model
+#------------------------------------------------------------------------------------------------
+Camera.ModelType=0
+
+#------------------------------------------------------------------------------------------------
+# Camera Mode (Capturing Mode)
+#	0 = Line Camera , 1= Frame Camera
+#------------------------------------------------------------------------------------------------
+Camera.Mode=0
+
+#------------------------------------------------------------------------------------------------
+#Port Count
+#------------------------------------------------------------------------------------------------
+Camera.Port.Count=8
+Camera.Port.Col=8
+Camera.Port.Row=1
+
+#------------------------------------------------------------------------------------------------
+#  0 = Binary Commands, 1 = Ascii Commands
+#------------------------------------------------------------------------------------------------
+Camera.CmdType=1
+
+#------------------------------------------------------------------------------------------------
+# Camera
+# Camera.CompanyName = String (Company Name)
+# Camera.BusName  = 
+#------------------------------------------------------------------------------------------------
+Camera.CompanyName=HAMAMATSU PHOTONICS K.K.
+Camera.BusName=
+
+[Interface]
+#------------------------------------------------------------------------------------------------
+# 	Type; File number from Dll.ini
+# 	SubInterface ; 0 : None, 1 : Com...
+#------------------------------------------------------------------------------------------------
+Interface.Type=2
+Interface.SubInterface=0
+#Interface.Name=CameraLink
+
+[Control Infomation]
+
+#------------------------------------------------------------------------------------------------
+# Default Processing Mode
+#	0 = Prefer ini-file.
+#	1 = Line Scaning Mode
+#	2 = Area Scanning Mode
+#	3 = Line to Area Scanning Mode
+#---------s---------------------------------------------------------------------------------------
+CtrlInfo.ProcessMode=1
+
+#------------------------------------------------------------------------------------------------
+# Maximum Measure Data Count
+#------------------------------------------------------------------------------------------------
+CtrlInfo.MaxDataCount=50000
+
+#------------------------------------------------------------------------------------------------
+# ADC
+#------------------------------------------------------------------------------------------------
+CtrlInfo.ADC.Model=AD9826
+
+#------------------------------------------------------------------------------------------------
+# Output Bit Size
+#------------------------------------------------------------------------------------------------
+CtrlInfo.Bit.Number=16
+
+#------------------------------------------------------------------------------------------------
+# Acquire frame count control
+#------------------------------------------------------------------------------------------------
+CtrlInfo.Command.AcqFrameCntCtrl.Valid=0
+
+#================================================================================================
+#  Gain
+#------------------------------------------------------------------------------------------------
+#  .Gain.Type=Type (Type:0=Combo 1=SpinBox)
+#  .Gain.Range=Min,Max,Step
+#  .Gain.Count=Number
+#  .Gain.99=Type,Name
+#------------------------------------------------------------------------------------------------
+CtrlInfo.Gain.Valid=0
+CtrlInfo.Gain.Type=1
+CtrlInfo.Gain.Range=0,0,1
+CtrlInfo.Gain.Count=1
+CtrlInfo.Gain.01=1,0
+CtrlInfo.Gain.Factory.Range=0,0,1
+CtrlInfo.Gain.Factory.Count=1
+CtrlInfo.Gain.Factory.01=1,0
+
+#================================================================================================
+#  Offset
+#------------------------------------------------------------------------------------------------
+#  .Offset.Valid=Type (Type:0=Invalid 1=Valid)
+#  .Offset.Range=Min,Max,Step
+#  .Offset.GainCalc.Valid=Type (Type:0=Invalid 1=Valid)
+#  .Offset.Offset.Type=Type (Type:1=Linear 2:MSB signed bit)
+#  .Offset.Offset.ADU.Type=Type (Type:1=ADU Normal Calculate / 2:ADU Step by Step / 3:Step only)
+#  .Offset.Offset.ADU.Step=Step (Step=Calculate step when "ADU Step by Step" type.
+#------------------------------------------------------------------------------------------------
+CtrlInfo.Offset.Valid=1
+CtrlInfo.Offset.Range=0,511,1
+CtrlInfo.Offset.GainCalc.Valid=0
+CtrlInfo.Offset.Type=1
+CtrlInfo.Offset.ADU.Type=3
+
+#================================================================================================
+#  Trigger
+#------------------------------------------------------------------------------------------------
+#  .Trigger.Mode.Count=Number
+#  .Trigger.Mode.99=Mode No,Mode Name
+#  .Trigger.Mode.99.Valid=Exposure,Polarity,Waittime,Terminal (0=Invalid 1=Valid)
+#  .Trigger.Exposure.Range=Min,Max,Step
+#  .Trigger.Polarity.Count=Number
+#  .Trigger.Polarity.99=Mode No,Mode Name
+#  .Trigger.WaitTime.Range=Min,Max,Step
+
+#  .Trigger.Termnal.Count=Number
+#  .Trigger.Termnal.99=Mode No,Mode Name
+
+#  .Trigger.Def.Mode= Mode No
+#  .Trigger.Def.Exp=Exp(Number)
+#  .Trigger.Def.Pol=Mode No
+#  .Trigger.Def.WaitTime=Wait(Number)
+#  .Trigger.Def.Tmnl=Tmnl No
+#-----------------------------------------------------------------------------------------------
+CtrlInfo.Trigger.Mode.Count=6
+
+# Set trigger name definition
+CtrlInfo.Trigger.Mode.01=0,Internal
+CtrlInfo.Trigger.Mode.02=1,External Edge 1
+CtrlInfo.Trigger.Mode.03=9,External Edge 2
+CtrlInfo.Trigger.Mode.04=7,External Level 1
+CtrlInfo.Trigger.Mode.05=10,External Level 2
+CtrlInfo.Trigger.Mode.06=8,External Gating
+
+# Set control pannel enable/disable definition.
+#      =ExposureTime, Plarity, WaitTime, InputTerminal
+CtrlInfo.Trigger.Mode.01.Valid=1,0,1,0
+CtrlInfo.Trigger.Mode.02.Valid=1,1,1,1
+CtrlInfo.Trigger.Mode.03.Valid=1,1,0,1
+CtrlInfo.Trigger.Mode.04.Valid=0,1,0,1
+CtrlInfo.Trigger.Mode.05.Valid=0,1,0,1
+CtrlInfo.Trigger.Mode.06.Valid=1,1,1,1
+
+# Set send 025 definition, for DLL.
+#      =TriggerCode, 025Enable, Mon(Permitte 0), Acq(Permitte 0)
+CtrlInfo.Trigger.Mode.01.SetFrmCnt=01,0,0,0
+CtrlInfo.Trigger.Mode.02.SetFrmCnt=02,0,0,0
+CtrlInfo.Trigger.Mode.03.SetFrmCnt=03,0,0,0
+CtrlInfo.Trigger.Mode.04.SetFrmCnt=04,0,0,0
+CtrlInfo.Trigger.Mode.05.SetFrmCnt=05,0,0,0
+CtrlInfo.Trigger.Mode.06.SetFrmCnt=06,0,0,0
+
+CtrlInfo.Trigger.ExpCond.Valid=0
+# Set exposure control definition.
+# Valid : TRUE->check / FALSE->not check
+# if==# Numberis trigger code / data. 99 <- 99 is Trigger Mode code.
+# (0== : GS mode, 1 : RS mode, 2 : MS mode)
+CtrlInfo.Trigger.ExpCond.01=0
+CtrlInfo.Trigger.ExpCond.02=0
+CtrlInfo.Trigger.ExpCond.03=0
+CtrlInfo.Trigger.ExpCond.04=0
+CtrlInfo.Trigger.ExpCond.05=0
+CtrlInfo.Trigger.ExpCond.06=0
+
+
+# Default exposure time range.
+CtrlInfo.Trigger.Exposure.Range=0,16777215,1
+
+CtrlInfo.Trigger.Polarity.Count=2
+CtrlInfo.Trigger.Polarity.01=0,Positive
+CtrlInfo.Trigger.Polarity.02=1,Negative
+
+CtrlInfo.Trigger.WaitTime.Range=3,65535,1
+
+CtrlInfo.Trigger.Termnal.Count=4
+CtrlInfo.Trigger.Termnal.01=0,Single-end
+CtrlInfo.Trigger.Termnal.02=1,Differential
+CtrlInfo.Trigger.Termnal.03=2,Both(AND)
+CtrlInfo.Trigger.Termnal.04=3,Both(OR)
+
+CtrlInfo.Trigger.OneShotMode.Valid=0
+CtrlInfo.Trigger.OneShotMode.Range=1,100000,1
+CtrlInfo.Trigger.OneShotMode.ModeNo=11
+
+
+CtrlInfo.Trigger.OverClock.Valid=0
+
+#----------------------------------------------------------
+#Default Trigger Setting
+#----------------------------------------------------------
+CtrlInfo.Trigger.Def.Mode=0
+CtrlInfo.Trigger.Def.Exp=100
+CtrlInfo.Trigger.Def.Pol=0
+CtrlInfo.Trigger.Def.WaitTime=5
+CtrlInfo.Trigger.Def.Tmnl=0
+
+#================================================================================================
+#  External Pulse Mode
+#------------------------------------------------------------------------------------------------
+#  .EPM.Mode.Count=Number
+
+#  .EPM.Mode.99=Mode No,Mode Name(Type:0=Invalid 1=Valid)
+
+#  .EPM.Polarity.99=Mode No, Mode Name
+
+#  .EPM.Delay.Valid=Type (Type:0=Invalid 1=Valid)
+#  .EPM.Delay.Range=Min,Max,Step
+
+#  .EPM.Pulse.Valid=Type (Type:0=Invalid 1=Valid)
+#  .EPM.Pulse.Range=Min,Max,Step
+
+#  .EPM.Termnal.Count=Number
+#  .EPM.Termnal.99=Mode No,Mode Name
+#------------------------------------------------------------------------------------------------
+CtrlInfo.EPM.Mode.Count=3
+CtrlInfo.EPM.Mode.01=0,0,ON
+CtrlInfo.EPM.Mode.02=0,1,OFF
+CtrlInfo.EPM.Mode.03=0,2,AUTO
+
+CtrlInfo.EPM.Delay.Valid=1
+CtrlInfo.EPM.Delay.Range=0,16777215,1
+
+CtrlInfo.EPM.Pulse.Valid=1
+CtrlInfo.EPM.Pulse.Range=0,16777215,1
+
+CtrlInfo.EPM.Termnal.Count=1
+CtrlInfo.EPM.Termnal.01=0,Single-end
+
+#================================================================================================
+#  Binning
+#------------------------------------------------------------------------------------------------
+#  .Binning.Valid=Type,Type(Dummy) (Type:0=Invalid 1=Valid)
+#  .Binning.Mode.99.FormatH=Supported Format Type(Only used for binning mode 02)
+#   1=1X(None), 2=2X..., F=Full
+#  .Binning.Mode.99.FormatV=Supported Format Type(Only used for binning mode 02)
+#   1=1X(None), 2=2X..., F=Full
+#  .Binning.Mode.99.DummyH=Type
+#  .Binning.Mode.99.DummyV=Type(DummyV used only in mode 02 and 03)
+#------------------------------------------------------------------------------------------------
+CtrlInfo.Binning.Valid=0
+CtrlInfo.Binning.Version=000
+#------------------------------------------------------------------------------------------------
+# "00" : 1x1 area binning
+CtrlInfo.Binning.Mode.00.Valid=0
+CtrlInfo.Binning.Mode.00.FormatPxl=
+CtrlInfo.Binning.Mode.00.FormatLine=
+CtrlInfo.Binning.Mode.00.DummyPxl=0
+CtrlInfo.Binning.Mode.00.DummyLine=0
+
+# "01" : full line binning
+CtrlInfo.Binning.Mode.01.Valid=1
+CtrlInfo.Binning.Mode.01.FormatPxl=				# not use, always NULL
+CtrlInfo.Binning.Mode.01.FormatLine=			# not use, always NULL
+CtrlInfo.Binning.Mode.01.DummyPxl=0
+CtrlInfo.Binning.Mode.01.DummyLine=				# not use, always NULL
+
+# "02" : area binning
+CtrlInfo.Binning.Mode.02.Valid=0
+CtrlInfo.Binning.Mode.02.FormatPxl=
+CtrlInfo.Binning.Mode.02.FormatLine=			# not use, always NULL
+CtrlInfo.Binning.Mode.02.DummyPxl=0
+CtrlInfo.Binning.Mode.02.DummyLine=				# not use, always NULL
+
+# "03" : line / pixel binning
+CtrlInfo.Binning.Mode.03.Valid=0
+CtrlInfo.Binning.Mode.03.FormatPxl=
+CtrlInfo.Binning.Mode.03.FormatLine=
+CtrlInfo.Binning.Mode.03.DummyPxl=0
+CtrlInfo.Binning.Mode.03.DummyLine=0
+
+# "04" : area extraction
+CtrlInfo.Binning.Mode.04.Valid=0
+CtrlInfo.Binning.Mode.04.FormatPxl=
+CtrlInfo.Binning.Mode.04.FormatLine=
+CtrlInfo.Binning.Mode.04.DummyPxl=				# not use, always NULL
+CtrlInfo.Binning.Mode.04.DummyLine=0
+
+
+#================================================================================================
+#  Sensor Pulse Width (TG)
+#------------------------------------------------------------------------------------------------
+#  .Valid=Type (Type:0=Invalid 1=Valid)
+#  .TG.Range.Lo=0 	Setting range lo.
+#  .TG.Range.Hi=0	Setting range hi.
+#------------------------------------------------------------------------------------------------
+CtrlInfo.TG.Valid=0
+CtrlInfo.TG.Range.Valid=0
+CtrlInfo.TG.Range.Lo=0
+CtrlInfo.TG.Range.Hi=16777215
+
+#================================================================================================
+#  Sensor
+#------------------------------------------------------------------------------------------------
+#  .Sensor.Count=Number
+#  .Sensor.99=Type No,Name
+#  .Sensor.99.Horz=Number
+#  .Sensor.99.Vert=Number
+#------------------------------------------------------------------------------------------------
+CtrlInfo.Sensor.Valid=0
+CtrlInfo.Sensor.Count=1
+CtrlInfo.Sensor.Sensor01=G10768-1024D,0,24,1024,1
+#================================================================================================
+#  Temperature
+#------------------------------------------------------------------------------------------------
+#  .Temp.Valid=Type (Type:0=Invalid 1=Valid)
+#  .Temp.Control.Sync=Type (Type:0=None synchronous  1:Not compulsory synchronaization  2:Compulsory synchronaization
+#  .Temp.Fan.Valid=Type (Type:0=Fan Invalid 1=Fan Valid)
+#  .Temp.Fan.Monitor.Valid=Type (Type:0="Monitoring FAN status" invalid. 1="Monitoring FAN status" valid.)
+#  .Temp.Control.Valid=Type (Type:0="Cooling control" invalid. 1="Cooling control" valid.)
+#  .Temp.Monitor.Valid=Type (Type:0="Temperature monitor" invalid. 1="Temperature monitor" valid.)
+#  .Temp.Monitor.Sensor.Type=Type (Type:0=Through the return value.
+#                                       1=Formula for MAX6698. 
+#                                       2=Formula for MAX6698x2. 
+#                                       3=Formula for MAX6698+AD7991. 
+#                                       4=Formula for MAX6698+AD7991-2.) 
+#  .Temp.Monitor.Circuit.Type=Type (Type:0=Through the return value.
+#                                        1=Formula for MAX6698. 
+#                                        2=Formula for MAX6698x2. 
+#                                        3=Formula for MAX6698+AD7991. 
+#                                        4=Formula for MAX6698+AD7991-2.) 
+#  .Temp.Sensor.Valid=0
+#  .Temp.Measure.Valid=Type (Type:0=Measure Invalid 1=Measure Valid)
+#  .Temp.Measure.Stop = Type(Type:0=Invalid 1=Valid)
+#  .Temp.Measure.Valid.99=Type(Type:0=Invalid 1=Valid)
+#------------------------------------------------------------------------------------------------
+CtrlInfo.Temp.Valid=0
+CtrlInfo.Temp.Fan.Valid=0
+CtrlInfo.Temp.Fan.Monitor.Valid=0
+CtrlInfo.Temp.Control.Valid=0
+CtrlInfo.Temp.Control.Sync=0
+CtrlInfo.Temp.Monitor.Valid=1
+CtrlInfo.Temp.Monitor.Sensor.Type=0
+CtrlInfo.Temp.Monitor.Circuit.Type=0
+CtrlInfo.Temp.Sensor.Valid=1
+CtrlInfo.Temp.Measure.Valid=0
+CtrlInfo.Temp.Measure.Valid.01=1
+CtrlInfo.Temp.Measure.Valid.02=1
+CtrlInfo.Temp.Measure.Valid.03=1
+CtrlInfo.Temp.Measure.Valid.04=1
+CtrlInfo.Temp.Measure.Stop=0
+CtrlInfo.Temp.Sensor.Thermister.Count00=0
+CtrlInfo.Temp.Sensor.Thermister.Count01=0
+
+#================================================================================================
+#  Integration Capacity
+#------------------------------------------------------------------------------------------------
+#  .IC.Count=Number
+#  .IC.99=Type,Name
+#------------------------------------------------------------------------------------------------
+CtrlInfo.IC.Valid=1
+CtrlInfo.IC.Count=4
+CtrlInfo.IC.01=1,0.1 [pF]
+CtrlInfo.IC.02=3,0.5 [pF]
+CtrlInfo.IC.03=5,2.0 [pF]
+CtrlInfo.IC.04=7,10.0 [pF]
+CtrlInfo.IC.CamIdx.01=1
+CtrlInfo.IC.CamIdx.02=2
+CtrlInfo.IC.CamIdx.03=3
+CtrlInfo.IC.CamIdx.04=4
+CtrlInfo.IC.Factory.Count=4
+CtrlInfo.IC.Factory.01=1,0.1 [pF]
+CtrlInfo.IC.Factory.02=3,0.5 [pF]
+CtrlInfo.IC.Factory.03=5,2.0 [pF]
+CtrlInfo.IC.Factory.04=7,10.0 [pF]
+CtrlInfo.IC.Factory.CamIdx.01=1
+CtrlInfo.IC.Factory.CamIdx.02=3
+CtrlInfo.IC.Factory.CamIdx.03=2
+CtrlInfo.IC.Factory.CamIdx.04=4
+
+#================================================================================================
+#  Calibration
+#------------------------------------------------------------------------------------------------
+#  .Calibration.Drak.Valid=Type        (Type:0=Invalid 1=Valid)
+#  .Calibration.Drak.Tyep=Type
+#  .Calibration.Sensitivity.Valid=Type (Type:0=Invalid 1=Valid)
+#  .Calibration.Sensitivity.Tyep=Type  (Type:0=Software Calibration 1=Hardware Calibration)
+#  .Calibration.Defect.Valid           (Type:0=Invalid 1=Valid)
+#  .Calibration.Defect.Tyep=Type
+#
+#  .Calibration.Sensitivity.Select.Type=Type       (Type:0="Software" only, 1="Software/Camera" )
+#  .Calibration.Defect.Select.Type=Type            (Type:0="Software" only, 1="Software/Camera" )
+#  .Calibration.Camera.Type=Type                   (Type:0=Normal, 1=High-speed Line Camera )
+#  .Calibration.Sensitivity.Range.Coeff.Max=65535  Input range maximum value of the coefficient.(HS:65535)
+#  .Calibration.Sensitivity.Range.Coeff.Min=0      Input range minimum value of the coefficient.(HS:0)
+#  .Calibration.Sensitivity.Range.Offset.Max=65535 Input range maximum value of the offset.(HS:4096)
+#  .Calibration.Sensitivity.Range.Offset.Min=0     Input range minimum value of the offset.(HS:0)
+#  .Calibration.Sensitivity.Calc.Coeff.Max=1.255   Maximum value of the coefficient calculation results.(HS:1.127)
+#  .Calibration.Sensitivity.Calc.Coeff.Min=0.744   Minimum value of the coefficient calculation results.(HS:0.872)
+#  .Calibration.Sensitivity.Calc.Offset.Max=2767   Maximum value of the offset calculation results.(HS:127)
+#  .Calibration.Sensitivity.Calc.Offset.Min=-32768 Minimum value of the offset calculation results.(HS:-127)
+#   *HS : High-speed Line Camera.
+#
+#------------------------------------------------------------------------------------------------
+CtrlInfo.Calibration.Drak.Valid=1
+CtrlInfo.Calibration.Drak.Tyep=1
+CtrlInfo.Calibration.Drak.Line.Valid=1
+CtrlInfo.Calibration.Drak.Frame.Valid=1
+CtrlInfo.Calibration.Sensitivity.Valid=1
+CtrlInfo.Calibration.Sensitivity.Tyep=0
+CtrlInfo.Calibration.Defect.Valid=1
+CtrlInfo.Calibration.Defect.Tyep=0
+
+
+CtrlInfo.Calibration.Sensitivity.Select.Type=1
+CtrlInfo.Calibration.Defect.Select.Type=1
+CtrlInfo.Calibration.Camera.Type=0
+CtrlInfo.Calibration.Sensitivity.Range.Coeff.Max=65535
+CtrlInfo.Calibration.Sensitivity.Range.Coeff.Min=0
+CtrlInfo.Calibration.Sensitivity.Range.Offset.Max=65535
+CtrlInfo.Calibration.Sensitivity.Range.Offset.Min=0
+CtrlInfo.Calibration.Sensitivity.Calc.Coeff.Max=1.255
+CtrlInfo.Calibration.Sensitivity.Calc.Coeff.Min=0.744
+CtrlInfo.Calibration.Sensitivity.Calc.Offset.Max=32767
+CtrlInfo.Calibration.Sensitivity.Calc.Offset.Min=-32768
+
+
+#================================================================================================
+#  Transfer Frequency 
+#------------------------------------------------------------------------------------------------
+#  .TransferFrequency.Valid=Tyep
+#  .TransferFrequency.Tyep=Type
+#         2 : Calcurate from exposure-time and readout-time.
+#         3 : from hardware
+#  .ITEC.Type=Type
+#         0 : Current
+#         1 : Voltage
+#------------------------------------------------------------------------------------------------
+CtrlInfo.TransferFrequency.FPV.Valid=0
+CtrlInfo.TransferFrequency.FPV.Type=0
+CtrlInfo.TransferFrequency.FPH.Valid=0
+CtrlInfo.TransferFrequency.FPH.Type=0
+CtrlInfo.TransferFrequency.PixelClock.Valid=1
+CtrlInfo.TransferFrequency.PixelClock.Type=1
+CtrlInfo.TransferFrequency.ReadoutTime.Valid=1
+CtrlInfo.TransferFrequency.LineRete.Type=1
+CtrlInfo.TransferFrequency.ITEC.Type=0
+
+#================================================================================================
+#  TAP
+#------------------------------------------------------------------------------------------------
+#  .TAP.Valid=Type (Type:0=Invalid 1=Valid)
+#------------------------------------------------------------------------------------------------
+CtrlInfo.TAP.Valid=0
+
+#================================================================================================
+#  Pixel Bit Depth
+#------------------------------------------------------------------------------------------------
+#  .PixelDepth.Valid=1             Select sensor combo visible flag. (Type:0=Invalid 1=Valid)
+#  .PixelDepth.Count=10            Select sensor combo item count.
+#  .PixelDepth.Bit99=0,8
+#                              Pixel-Code,Pixel-Count
+#------------------------------------------------------------------------------------------------
+CtrlInfo.PixelDepth.Valid=1
+CtrlInfo.PixelDepth.Count=5
+CtrlInfo.PixelDepth.Bit01=8,8
+CtrlInfo.PixelDepth.Bit02=10,10
+CtrlInfo.PixelDepth.Bit03=12,12
+CtrlInfo.PixelDepth.Bit04=14,14
+CtrlInfo.PixelDepth.Bit05=16,16
+
+
+#================================================================================================
+#  
+#------------------------------------------------------------------------------------------------
+#  .FactoryMode2.Valid=Type (Type:0=Invalid 1=Valid)
+#  .FactoryMode2.ADC.Count=Number
+#  .FactoryMode2.ADCType=Type (Type: 1=Valid [Port List] only
+#                                    3=Valid [All Select] + [Port List]
+#                                    4=Valid [Gain High / Low] + [Timing] for C12081
+#                             )
+#  .FactoryMode2.ADC.PortSelect.Valid=Type (Type:0=Invalid 1=Valid)
+#  .FactoryMode2.ADC.PortSelect.Count=Number
+#  .FactoryMode2.ADC.PortSelect.AllSelec.Indext=Nubmer
+#  .FactoryMode2.ADC.PortSelect.Count=Number
+#  .FactoryMode2.ADC.PortSelect99=Mode No,Mode Name
+#------------------------------------------------------------------------------------------------
+CtrlInfo.FactoryMode2.ADC.Type=3
+CtrlInfo.FactoryMode2.ADC.Count=4
+CtrlInfo.FactoryMode2.Valid=1
+CtrlInfo.FactoryMode2.ADC.PortSelect.Valid=1
+CtrlInfo.FactoryMode2.ADC.PortSelect.AllSelec.Indext=01
+CtrlInfo.FactoryMode2.ADC.Port.Count=2
+CtrlInfo.FactoryMode2.ADC.PortSelect.Count=4
+CtrlInfo.FactoryMode2.ADC.PortSelect01=1,1(1-2 Port)
+CtrlInfo.FactoryMode2.ADC.PortSelect02=2,2(3-4 Port)
+CtrlInfo.FactoryMode2.ADC.PortSelect03=3,3(5-6 Port)
+CtrlInfo.FactoryMode2.ADC.PortSelect04=4,4(7-8 Port)
+CtrlInfo.FactoryMode2.GainTable.Valid=0
+CtrlInfo.FactoryMode2.OffsetTable.Valid=1
+
+#================================================================================================
+#  Bias and Offset
+#------------------------------------------------------------------------------------------------
+#  .FactoryMode2_1.Valid=Type (Type:0=Invalid 1=Valid)
+#  .FactoryMode2_1.Device=AD5625
+#------------------------------------------------------------------------------------------------
+CtrlInfo.FactoryMode2_1.Valid=0
+CtrlInfo.FactoryMode2_1.Device=AD9826
+
+#====================================================================
+#  Digital Potentiometer
+#------------------------------------------------------------------------------------------------
+#  .FactoryMode2_2.Valid=Type (Type:0=Invalid 1=Valid)
+#  .FactoryMode2_2.Device=AD5254
+#------------------------------------------------------------------------------------------------
+CtrlInfo.FactoryMode2_2.Valid=0
+#CtrlInfo.FactoryMode2_2.Device=AD5254
+
+#================================================================================================
+#  Playback Interval
+#------------------------------------------------------------------------------------------------
+#  .Playback.Interval.Lo=Number       * msec
+#  .Playback.Interval.Hi=Number       * msec
+#------------------------------------------------------------------------------------------------
+CtrlInfo.Playback.Interval.Lo=0
+CtrlInfo.Playback.Interval.Hi=1000
+
+
+#================================================================================================
+#  Reference dialog parameter
+#------------------------------------------------------------------------------------------------
+#
+#
+#------------------------------------------------------------------------------------------------
+Reference.Scale.Coefficient=1.0
+Reference.FactorySetup1.SystemGain=5.34e-/ADU
+
+
+#################################################################################################
+#
+#    FOR FACTORY SETUP DIALOG
+#
+#################################################################################################
+
+[FSCode]
+
+#================================================================================================
+#  Factory Setup 1  Property Page settings
+#------------------------------------------------------------------------------------------------
+#  FS10_0=XXXXXX -> FS(FactorySetup)1(majer number)0(miner number)_0(TAB index)
+#
+#                FS10_BASEINFO : Standard property page.
+#
+#------------------------------------------------------------------------------------------------
+FS10_0=FS10_BASEINFO
+
+#================================================================================================
+#  Factory Setup 2  Property Page settings
+#------------------------------------------------------------------------------------------------
+#  FS20_0=XXXXXX -> FS(FactorySetup)2(majer number)0(miner number)_0(TAB index)
+#
+#                FS20_IC00        :
+#                FS20_DATAGAIN    :
+#                FS20_IC9826      :
+#                FS20_PULSE       : for PulseTiming
+#                FS20_IC9978      :
+#                FS20_GAIN        :
+#                FS20_PULSETIMING :
+#                FS20_REFVOLTAGE  :
+#                FS20_C11512_1648 : for C11512-1648
+#
+#------------------------------------------------------------------------------------------------
+FS20_0=FS20_IC9826
+FS20_1=FS20_PULSE
+
+#================================================================================================
+#  Factory Setup 2-1  Property Page settings
+#------------------------------------------------------------------------------------------------
+#  FS21_0=XXXXXX -> FS(FactorySetup)2(majer number)1(miner number)_0(TAB index)
+#
+#                FS21_OFFSET      :
+#                FS21_DACSET      :
+#                FS21_AD5625      : Basic circuit for C12081
+#                FS21_AD5625STD   : Standard circuit for C12081
+#                FS21_C11512_1648 : for C11512-1648
+#
+#------------------------------------------------------------------------------------------------
+
+
+#================================================================================================
+#  Factory Setup 2-2  Property Page settings
+#------------------------------------------------------------------------------------------------
+#  FS22_0=XXXXXX -> FS(FactorySetup)2(majer number)2(miner number)_0(TAB index)
+#
+#                FS22_AD5254     : Basic circuit for C12081
+#                FS22_AD5254STD  : Standard circuit for C12081
+#
+#------------------------------------------------------------------------------------------------
+
+
+#================================================================================================
+#  Factory Setup 3  Property Page settings
+#------------------------------------------------------------------------------------------------
+#  FS30_0=XXXXXX -> FS(FactorySetup)3(majer number)0(miner number)_0(TAB index)
+#
+#                FS30_CONTROL     :
+#                FS30_TOLERANCE   :
+#                FS30_INFORMATION :
+#                FS30_PELTIERCTL  :
+#                FS30_PELTIERPRM  :
+#                FS30_PID         :
+#                FS30_TECVOL      :
+#                FS30_TEMPVOL     :
+#                FS30_TIME        :
+#
+#------------------------------------------------------------------------------------------------
+
+
+
+#################################################################################################
+#
+#    DEFINE CONDITION FILES FOR FACTORY SETUP DIALOG
+#
+#		Keyword "FSnn_m" is same as definition keyword of dialog.
+#
+#################################################################################################
+
+[FSConditionFile]
+
+
+

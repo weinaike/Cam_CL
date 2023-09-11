@@ -1,0 +1,19 @@
+Device Info 
+
+Dev Name, DLL Id, Command Type, Sub Interface
+C10854,0, 1, 0
+C11512-02,0, 1, 0
+C11512,0, 1, 0
+C11514,0, 1, 0
+C14531,1, 1, 0
+C14532,1, 1, 0
+C14533,1, 1, 0
+C15800,1, 1, 0
+C15801,1, 1, 0
+C15804,1, 1, 0
+C15805,1, 1, 0
+DLL Info 
+
+DLL Name 
+sCli_Niimq.dll
+ssd_USBCamLib.dll
