@@ -7,6 +7,7 @@
 #define IDS_ABOUTBOX                    101
 #define IDD_SSDIC_SAMPLE_DIALOG         102
 #define IDR_MAINFRAME                   128
+#define ID_OK                           999
 #define IDC_BUTTON_MEASURE              1000
 #define IDC_BUTTON_ACQ                  1000
 #define IDC_BUTTON_INIT                 1001
@@ -34,6 +35,9 @@
 #define IDC_RADIO_UDP2                  1015
 #define IDC_RADIO_TCP                   1015
 #define IDC_IPADDRESS1                  1016
+#define IDC_EDIT2                       1017
+#define IDC_EDIT_ACQNUM                 1017
+             
 
 // Next default values for new objects
 // 
@@ -41,7 +45,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        129
 #define _APS_NEXT_COMMAND_VALUE         32771
-#define _APS_NEXT_CONTROL_VALUE         1017
+#define _APS_NEXT_CONTROL_VALUE         1018
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif

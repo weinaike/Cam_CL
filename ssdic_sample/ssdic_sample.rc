@@ -13,7 +13,7 @@
 #undef APSTUDIO_READONLY_SYMBOLS
 
 /////////////////////////////////////////////////////////////////////////////
-// 日本語 resources
+// Japanese resources
 
 #if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_JPN)
 #ifdef _WIN32
@@ -48,8 +48,8 @@ BEGIN
     "#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_JPN)\r\n"
     "LANGUAGE 17, 1\r\n"
     "#pragma code_page(932)\r\n"
-    "#include ""res\\ssdic_sample.rc2""  // Microsoft Visual C++ 以外で編集されたリソース\r\n"
-    "#include ""afxres.rc""     // 標準コンポーネント\r\n"
+    "#include ""res\\ssdic_sample.rc2""  // Microsoft Visual C++ ???曇????儕?乕?\r\n"
+    "#include ""afxres.rc""     // ????億乕???\r\n"
     "#endif\r\n"
     "\0"
 END
@@ -107,6 +107,7 @@ BEGIN
     CONTROL         "LAN(UDP)",IDC_RADIO_UDP,"Button",BS_AUTORADIOBUTTON | WS_DISABLED,14,211,46,10
     CONTROL         "LAN(TCP)",IDC_RADIO_TCP,"Button",BS_AUTORADIOBUTTON,14,228,46,10
     CONTROL         "",IDC_IPADDRESS1,"SysIPAddress32",WS_TABSTOP,12,241,100,15
+    EDITTEXT        IDC_EDIT_ACQNUM,76,41,40,14,ES_CENTER | ES_AUTOHSCROLL | ES_NUMBER
 END
 
 
@@ -187,7 +188,7 @@ BEGIN
     IDS_ABOUTBOX            "バージョン情報 ssdic_sample(&A)..."
 END
 
-#endif    // 日本語 resources
+#endif    // Japanese resources
 /////////////////////////////////////////////////////////////////////////////
 
 
@@ -205,8 +206,8 @@ END
 #if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_JPN)
 LANGUAGE 17, 1
 #pragma code_page(932)
-#include "res\ssdic_sample.rc2"  // Microsoft Visual C++ 以外で編集されたリソース
-#include "afxres.rc"     // 標準コンポーネント
+#include "res\ssdic_sample.rc2"  // Microsoft Visual C++ ﾒﾔﾍ筅ﾇｾ湿ｯ､ｵ､�､ｿ･�･ｽｩ`･ｹ
+#include "afxres.rc"     // 侏慳･ｳ･ﾝｩ`･ﾍ･ﾈ
 #endif
 
 /////////////////////////////////////////////////////////////////////////////

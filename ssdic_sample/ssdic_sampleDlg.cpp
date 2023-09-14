@@ -5,6 +5,8 @@
 #include "ssdic_sample.h"
 #include "ssdic_sampleDlg.h"
 #include "include/ssdic.h"
+#include <ctime>
+#include <string>
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -16,8 +18,8 @@
 //
 // for C12081
 //
-#define	MEAS_CNT		1		// Measure frame count
-#define	FRAME_V			64	// Frame vertical lines
+#define	MEAS_CNT		10000	// Measure frame count
+#define	FRAME_V			64		// Frame vertical lines
 #define	FRAME_H			64		// Frame horzontal pixels
 
 
@@ -89,8 +91,10 @@ void Cssdic_sampleDlg::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_STC_CONNECT_START, m_stcConnectStat);
 	DDX_Control(pDX, IDC_EDIT_SEND, edtSend);
 	DDX_Control(pDX, IDC_EDIT_RECEIVE, m_edtReceive);
+	DDX_Control(pDX, IDC_EDIT_ACQNUM, m_edtAcqNum);
 	DDX_Text(pDX, IDC_EDIT_SEND, m_strSend);
 	DDX_Text(pDX, IDC_EDIT_RECEIVE, m_strReceive);
+	DDX_Text(pDX, IDC_EDIT_ACQNUM, m_iAcqNum);
 	DDX_Control(pDX, IDC_IPADDRESS1, m_IPAddress);
 }
 
@@ -108,6 +112,9 @@ BEGIN_MESSAGE_MAP(Cssdic_sampleDlg, CDialog)
 	ON_BN_CLICKED(IDC_BUTTON_CHKFUNC, &Cssdic_sampleDlg::OnBnClickedButtonChkfunc)
 	ON_BN_CLICKED(IDC_BUTTON_STATE, &Cssdic_sampleDlg::OnBnClickedButtonState)
 	ON_BN_CLICKED(IDC_BUTTON_SENDRECV, &Cssdic_sampleDlg::OnBnClickedButtonSendrecv)
+	ON_BN_CLICKED(IDC_RADIO_TCP, &Cssdic_sampleDlg::OnBnClickedRadioTcp)
+	ON_EN_CHANGE(IDC_EDIT_ACQNUM, &Cssdic_sampleDlg::OnEnChangeEditAcqnum)
+	ON_EN_UPDATE(IDC_EDIT_ACQNUM, &Cssdic_sampleDlg::OnEnUpdateEditAcqnum)
 END_MESSAGE_MAP()
 
 
@@ -145,7 +152,12 @@ BOOL Cssdic_sampleDlg::OnInitDialog()
 	m_buttonRdoUdp.SetCheck(0);		// set select Cameralink is TRUE
 	m_buttonRdoTcp.SetCheck(0);		// set select Cameralink is TRUE
 	m_pTransBuffer = NULL;			// Init buffer pointer
+	m_intMaxNum = MEAS_CNT;
+	m_iAcqNum = 1;
 
+	CString MyString;
+	MyString.Format(_T("%d"), m_iAcqNum);
+	m_edtAcqNum.SetWindowText(MyString);
 	ButtonEnable(0);
 
 	return TRUE;  // フォーカスをコントロールに設定した場合を除き、TRUE を返します。
@@ -303,7 +315,7 @@ void Cssdic_sampleDlg::OnBnClickedButtonInit()
 	}
 	
 	// alloc capture buffer
-	m_pTransBuffer = new WORD[FRAME_V*FRAME_H*MEAS_CNT];
+	m_pTransBuffer = new WORD[FRAME_V*FRAME_H*m_intMaxNum];
 	if(m_pTransBuffer == NULL)
 	{
 		AfxMessageBox(_T("Capture buffer allocate error!!"));
@@ -355,12 +367,24 @@ void Cssdic_sampleDlg::OnBnClickedButtonAcq()
 		AfxMessageBox(strErrorMsg);
 	}
 
+	if (m_iAcqNum > m_intMaxNum)
+	{
+		delete m_pTransBuffer;
+		m_pTransBuffer = NULL;
+		m_intMaxNum = m_iAcqNum;
+		m_pTransBuffer = new WORD[FRAME_V*FRAME_H*m_intMaxNum];			
+		CString	strInfoMessage;
+		strInfoMessage.Format(_T("new mem for num[%d]"), m_intMaxNum);
+		TRACE(strInfoMessage);
+	}
+
+
 	// Measure parameter (ACQUISITION)
 	SSDICCTRL_ACQ_INFO acqInfo;
 	acqInfo.nWidth = lHoriPix;
 	acqInfo.nHeight = lVertPix;
 	acqInfo.nFrameBytes = lHoriPix*lVertPix*2;
-	acqInfo.nFrameCount = MEAS_CNT;				// 10 frame
+	acqInfo.nFrameCount = m_iAcqNum;				// 10 frame
 	acqInfo.pMeasRoutine = CallbackAcquire;		// Callback function
 	acqInfo.pMeasContext = this;
 	acqInfo.nFrmRateMode = 1;					// Reserve
@@ -477,12 +501,39 @@ VOID CALLBACK Cssdic_sampleDlg::CallbackAcquire( INT nEventNo, PVOID pArgData, P
 				LONG lHoriPix = 0;
 				LONG lVertPix = 0;
 				LONG lRet = ssdic_GetMeasureSize(pDlg->m_hHandle, &lHoriPix, &lVertPix);
+
+				if (SSDIC_ERR_NONE == lRet) {
+					FILE	*fp = NULL;
+					char name[256] = {0};
+
+					time_t currentTime;
+					struct tm* localTimeInfo;
+					char timeString[80]; // 存???字符串的?冲区
+
+					time(&currentTime); // ?取当前??
+					localTimeInfo = localtime(&currentTime); // 将?????本地??
+
+					// 格式化???字符串
+					strftime(timeString, sizeof(timeString), "%Y_%m_%d_%H_%M_%S", localTimeInfo);
+
+					// 将??字符串打印到控制台
+					std::string timeStr(timeString);				
+
+					sprintf(name, "acquire_image_%s_%d_%d_%d.bin", timeStr, lHoriPix, lVertPix, pDlg->m_iAcqNum);
+					fp = fopen(name,"wb");
+					if (fp) {
+						fwrite(pDlg->m_pTransBuffer, lHoriPix*lVertPix*pDlg->m_iAcqNum*2, 1, fp); //二?制写
+						fclose(fp);
+						fp = NULL;
+					}
+				}
+			
 				if (SSDIC_ERR_NONE == lRet) {
 					FILE	*fp = NULL;
 					fp = fopen("Acquire.csv", "wt");
 					if (fp) {
 						ULONG nIdx = 0;
-						for (ULONG nFrame = 0 ; nFrame < MEAS_CNT ; nFrame++) {
+						for (ULONG nFrame = 0 ; nFrame < pDlg->m_iAcqNum ; nFrame++) {
 							fprintf(fp, "Frame Number : %d\n", nFrame);
 							for (ULONG nV = 0 ; nV < lVertPix ; nV++) {
 								for (ULONG nH = 0 ; nH < lHoriPix ; nH++) {
@@ -889,4 +940,48 @@ void Cssdic_sampleDlg::OnBnClickedButtonSendrecv()
 	pszSend = (LPTSTR)(LPCTSTR)m_strSend;
 	LONG lRet = ssdic_SendRecvCmd(m_hHandle, pszSend, strlen(pszSend), szReceive,sizeof(szReceive) );
 	m_edtReceive.SetWindowText(CString(szReceive));
+}
+
+void Cssdic_sampleDlg::OnBnClickedRadioTcp()
+{
+	// TODO: Add your control notification handler code here
+}
+
+
+void Cssdic_sampleDlg::OnEnChangeEditAcqnum()
+{
+	// TODO:  If this is a RICHEDIT control, the control will not
+	// send this notification unless you override the CDialog::OnInitDialog()
+	// function and call CRichEditCtrl().SetEventMask()
+	// with the ENM_CHANGE flag ORed into the mask.
+
+	// TODO:  Add your control notification handler code here
+
+}
+
+void Cssdic_sampleDlg::OnEnUpdateEditAcqnum()
+{
+	// TODO:  If this is a RICHEDIT control, the control will not
+	// send this notification unless you override the CDialog::OnInitDialog()
+	// function to send the EM_SETEVENTMASK message to the control
+	// with the ENM_UPDATE flag ORed into the lParam mask.
+
+	// TODO:  Add your control notification handler code here
+	int old = m_iAcqNum;
+	UpdateData(TRUE);
+	if ((m_iAcqNum >= 1) && (m_iAcqNum < 100000 ))
+	{
+		CString MyString;
+		MyString.Format(_T("set acquire num is %d"), m_iAcqNum);
+		m_edtReceive.SetWindowText(MyString); 
+	}
+	else
+	{
+		CString MyString;
+		MyString.Format(_T("acquire range is [0 100000]"));
+		MessageBox(MyString);
+		m_iAcqNum = old;
+		MyString.Format(_T("%d"), m_iAcqNum);
+		m_edtAcqNum.SetWindowText(MyString);
+	}
 }

@@ -23,6 +23,7 @@ public:
 
 private:
 	WORD*	m_pTransBuffer;
+
 	volatile HDEVIF	m_hHandle;
 	static VOID CALLBACK CallbackAcquire( INT nEventNo, PVOID pArgData, PVOID pContext );
 	static VOID CALLBACK CallbackMonitor( INT nEventNo, PVOID pArgData, PVOID pContext );
@@ -31,8 +32,8 @@ private:
 
 // implementation
 protected:
-	HICON m_hIcon;
-
+	HICON 	m_hIcon;
+	INT 	m_intMaxNum;
 	// message allocation function
 	virtual BOOL OnInitDialog();
 	afx_msg void OnSysCommand(UINT nID, LPARAM lParam);
@@ -66,8 +67,13 @@ public:
 	CStatic m_stcConnectStat;
 	CEdit edtSend;
 	CEdit m_edtReceive;
+	CEdit m_edtAcqNum;
 	afx_msg void OnBnClickedButtonSendrecv();
 	CString m_strSend;
 	CString m_strReceive;
+	INT 	m_iAcqNum;
 	CIPAddressCtrl m_IPAddress;
+	afx_msg void OnBnClickedRadioTcp();
+	afx_msg void OnEnChangeEditAcqnum();
+	afx_msg void OnEnUpdateEditAcqnum();
 };
