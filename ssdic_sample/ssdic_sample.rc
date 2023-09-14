@@ -48,8 +48,8 @@ BEGIN
     "#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_JPN)\r\n"
     "LANGUAGE 17, 1\r\n"
     "#pragma code_page(932)\r\n"
-    "#include ""res\\ssdic_sample.rc2""  // Microsoft Visual C++ ???ì‹????ôP?Âh?\r\n"
-    "#include ""afxres.rc""     // ????â≠Âh???\r\n"
+    "#include ""res\\ssdic_sample.rc2""  // Microsoft Visual C++ ???ùõ??????ò^?\r\n"
+    "#include ""afxres.rc""     // ?????ò^???\r\n"
     "#endif\r\n"
     "\0"
 END
@@ -82,32 +82,33 @@ BEGIN
     DEFPUSHBUTTON   "OK",IDOK,178,7,50,16,WS_GROUP
 END
 
-IDD_SSDIC_SAMPLE_DIALOG DIALOGEX 0, 0, 287, 271
+IDD_SSDIC_SAMPLE_DIALOG DIALOGEX 0, 0, 291, 192
 STYLE DS_SETFONT | DS_MODALFRAME | WS_POPUP | WS_VISIBLE | WS_CAPTION
 EXSTYLE WS_EX_RIGHT | WS_EX_APPWINDOW
 CAPTION "ssdic_sample"
 FONT 9, "MS UI Gothic", 0, 0, 0x1
 BEGIN
-    PUSHBUTTON      "Acquire",IDC_BUTTON_ACQ,21,40,50,16
-    PUSHBUTTON      "Exit",IDOK,21,135,50,18
-    DEFPUSHBUTTON   "Connect",IDC_BUTTON_INIT,21,18,50,14
-    PUSHBUTTON      "Disconnect",IDC_BUTTON_TERM,21,111,50,16
-    GROUPBOX        "Select Interface",IDC_STATIC,6,162,114,102
-    CONTROL         "Camera Link",IDC_RADIO_CL,"Button",BS_AUTORADIOBUTTON,14,177,53,10
-    CONTROL         "USB",IDC_RADIO_USB,"Button",BS_AUTORADIOBUTTON,14,194,29,10
-    PUSHBUTTON      "Monitor",IDC_BUTTON_MON,21,63,50,16
-    PUSHBUTTON      "Stop",IDC_BUTTON_STOP,21,86,50,16
-    PUSHBUTTON      "Checking functions",IDC_BUTTON_CHKFUNC,160,12,78,16
-    EDITTEXT        IDC_TRACE_FUNC,127,36,150,120,ES_MULTILINE | ES_AUTOVSCROLL | ES_READONLY | WS_VSCROLL
-    PUSHBUTTON      "Connect State",IDC_BUTTON_STATE,136,174,50,16
-    LTEXT           "",IDC_STC_CONNECT_START,190,174,90,16,0,WS_EX_STATICEDGE
-    EDITTEXT        IDC_EDIT_SEND,140,201,138,12,ES_AUTOHSCROLL
-    EDITTEXT        IDC_EDIT_RECEIVE,140,243,138,12,ES_AUTOHSCROLL | ES_READONLY
-    PUSHBUTTON      "Send and Receive",IDC_BUTTON_SENDRECV,170,219,72,16
-    CONTROL         "LAN(UDP)",IDC_RADIO_UDP,"Button",BS_AUTORADIOBUTTON | WS_DISABLED,14,211,46,10
-    CONTROL         "LAN(TCP)",IDC_RADIO_TCP,"Button",BS_AUTORADIOBUTTON,14,228,46,10
-    CONTROL         "",IDC_IPADDRESS1,"SysIPAddress32",WS_TABSTOP,12,241,100,15
-    EDITTEXT        IDC_EDIT_ACQNUM,76,41,40,14,ES_CENTER | ES_AUTOHSCROLL | ES_NUMBER
+    PUSHBUTTON      "Acquire",IDC_BUTTON_ACQ,6,57,65,21
+    PUSHBUTTON      "Exit",IDOK,233,163,51,21
+    DEFPUSHBUTTON   "Connect",IDC_BUTTON_INIT,6,7,53,21
+    PUSHBUTTON      "Disconnect",IDC_BUTTON_TERM,67,7,53,21
+    GROUPBOX        "Select Interface",IDC_STATIC,6,106,114,78,NOT WS_VISIBLE | WS_GROUP
+    CONTROL         "Camera Link",IDC_RADIO_CL,"Button",BS_AUTORADIOBUTTON | NOT WS_VISIBLE,13,119,101,10
+    CONTROL         "USB",IDC_RADIO_USB,"Button",BS_AUTORADIOBUTTON | NOT WS_VISIBLE,13,131,103,10
+    PUSHBUTTON      "Monitor",IDC_BUTTON_MON,6,81,64,20,NOT WS_VISIBLE
+    PUSHBUTTON      "Stop",IDC_BUTTON_STOP,73,57,66,21
+    PUSHBUTTON      "Checking functions",IDC_BUTTON_CHKFUNC,125,83,98,24,NOT WS_VISIBLE
+    EDITTEXT        IDC_TRACE_FUNC,125,109,99,75,ES_MULTILINE | ES_AUTOVSCROLL | ES_READONLY | NOT WS_VISIBLE | WS_VSCROLL
+    PUSHBUTTON      "Connect State",IDC_BUTTON_STATE,126,7,53,21
+    LTEXT           "",IDC_STC_CONNECT_START,181,7,103,21,0,WS_EX_STATICEDGE
+    EDITTEXT        IDC_EDIT_SEND,177,57,72,21,ES_AUTOHSCROLL
+    EDITTEXT        IDC_EDIT_RECEIVE,177,35,107,17,ES_AUTOHSCROLL | ES_READONLY
+    PUSHBUTTON      "Send",IDC_BUTTON_SENDRECV,250,57,34,22
+    CONTROL         "LAN(UDP)",IDC_RADIO_UDP,"Button",BS_AUTORADIOBUTTON | NOT WS_VISIBLE,13,144,102,10
+    CONTROL         "LAN(TCP)",IDC_RADIO_TCP,"Button",BS_AUTORADIOBUTTON | NOT WS_VISIBLE,13,155,102,10
+    CONTROL         "",IDC_IPADDRESS1,"SysIPAddress32",NOT WS_VISIBLE | WS_DISABLED | WS_TABSTOP,13,166,100,15
+    EDITTEXT        IDC_EDIT_ACQNUM,73,35,66,17,ES_CENTER | ES_NUMBER
+    LTEXT           "Number of Frames:",IDC_STATIC,6,35,62,17,SS_CENTERIMAGE
 END
 
 
@@ -140,7 +141,7 @@ BEGIN
             VALUE "LegalCopyright", "Copyright (C) 2008-2013 HAMAMATSU PHOTONICS K.K"
             VALUE "OriginalFilename", "ssdic_sample.exe"
             VALUE "PrivateBuild", "2013.10.01A"
-            VALUE "ProductName", "ssdic_sample"
+            VALUE "ProductName", "IMAQ_DEMO"
             VALUE "ProductVersion", "1.0.1.0"
         END
     END
@@ -169,10 +170,10 @@ BEGIN
 
     IDD_SSDIC_SAMPLE_DIALOG, DIALOG
     BEGIN
-        LEFTMARGIN, 7
-        RIGHTMARGIN, 280
+        LEFTMARGIN, 6
+        RIGHTMARGIN, 284
         TOPMARGIN, 7
-        BOTTOMMARGIN, 264
+        BOTTOMMARGIN, 184
     END
 END
 #endif    // APSTUDIO_INVOKED
@@ -206,8 +207,8 @@ END
 #if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_JPN)
 LANGUAGE 17, 1
 #pragma code_page(932)
-#include "res\ssdic_sample.rc2"  // Microsoft Visual C++ “‘Õ‚§«æéºØ§µ§Ï§ø•Í•Ω©`•π
-#include "afxres.rc"     // òÀú •≥•Û•›©`•Õ•Û•»
+#include "res\ssdic_sample.rc2"  // Microsoft Visual C++ ???ï“????Éä?Å[?
+#include "afxres.rc"     // ????É|Å[???
 #endif
 
 /////////////////////////////////////////////////////////////////////////////

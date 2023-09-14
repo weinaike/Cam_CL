@@ -367,15 +367,29 @@ void Cssdic_sampleDlg::OnBnClickedButtonAcq()
 		AfxMessageBox(strErrorMsg);
 	}
 
-	if (m_iAcqNum > m_intMaxNum)
+	if ((m_iAcqNum > m_intMaxNum) || (m_pTransBuffer == NULL))
 	{
+		CString MyString;
+		MyString.Format(_T("must realloc memory ..."));
+		m_edtReceive.SetWindowText(MyString);
+
 		delete m_pTransBuffer;
 		m_pTransBuffer = NULL;
 		m_intMaxNum = m_iAcqNum;
-		m_pTransBuffer = new WORD[FRAME_V*FRAME_H*m_intMaxNum];			
-		CString	strInfoMessage;
-		strInfoMessage.Format(_T("new mem for num[%d]"), m_intMaxNum);
-		TRACE(strInfoMessage);
+		m_pTransBuffer = new WORD[FRAME_V*FRAME_H*m_intMaxNum];	
+		
+		if(m_pTransBuffer)
+		{
+			CString MyString;
+			MyString.Format(_T("success realloc memory [%d M]"), FRAME_V*FRAME_H*m_intMaxNum*2 / 1024 / 1024);
+			m_edtReceive.SetWindowText(MyString);
+		}
+		else
+		{
+			CString MyString;
+			MyString.Format(_T("realloc memory fail, Reduce number of frames pls"));
+			m_edtReceive.SetWindowText(MyString);
+		}
 	}
 
 
@@ -396,11 +410,13 @@ void Cssdic_sampleDlg::OnBnClickedButtonAcq()
 		strErrorMsg.Format(_T("StartAcquire Error = [%d]"), lRet);
 		AfxMessageBox(strErrorMsg);
 	}
-
-	//Sleep(2000);
-	//ssdic_AbortMeasure(hHandle);
-
-	ButtonEnable(2);
+	else
+	{
+		CString MyString;
+		MyString.Format(_T("start acquire ......"));
+		m_edtReceive.SetWindowText(MyString);
+		ButtonEnable(2);
+	}	
 }
 
 void Cssdic_sampleDlg::OnBnClickedButtonMon()
@@ -471,6 +487,9 @@ void Cssdic_sampleDlg::OnBnClickedButtonStop()
 		AfxMessageBox(strErrorMsg);
 	}
 
+	CString MyString;
+	MyString.Format(_T("stop by user"));
+	m_edtReceive.SetWindowText(MyString);
 	ButtonEnable(1);
 }
 
@@ -497,29 +516,27 @@ VOID CALLBACK Cssdic_sampleDlg::CallbackAcquire( INT nEventNo, PVOID pArgData, P
 				nCompFrameNo = *((ULONG*)pArgData);
 			}
 			strEventMessage.Format(_T("Acquire Transfer Complete [%d]\n"), nCompFrameNo);
+
 			if (NULL != pDlg) {
+				CString MyString;
+				MyString.Format(_T("acquire done, save data ..."));
+				pDlg->m_edtReceive.SetWindowText(MyString);
+
 				LONG lHoriPix = 0;
 				LONG lVertPix = 0;
 				LONG lRet = ssdic_GetMeasureSize(pDlg->m_hHandle, &lHoriPix, &lVertPix);
 
+				char name[256] = {0};
+				time_t currentTime;
+				struct tm* localTimeInfo;
+				char timeString[80] = {0}; 
+				time(&currentTime); 
+				localTimeInfo = localtime(&currentTime); 
+				strftime(timeString, sizeof(timeString), "%Y_%m_%d_%H_%M_%S", localTimeInfo);
+
 				if (SSDIC_ERR_NONE == lRet) {
-					FILE	*fp = NULL;
-					char name[256] = {0};
-
-					time_t currentTime;
-					struct tm* localTimeInfo;
-					char timeString[80]; // ‘¶???Žš•„‹ø“I?™t‹æ
-
-					time(&currentTime); // ?Žæ“–‘O??
-					localTimeInfo = localtime(&currentTime); // «?????–{’n??
-
-					// ŠiŽ®‰»???Žš•„‹ø
-					strftime(timeString, sizeof(timeString), "%Y_%m_%d_%H_%M_%S", localTimeInfo);
-
-					// «??Žš•„‹ø‘Åˆó“žT§‘ä
-					std::string timeStr(timeString);				
-
-					sprintf(name, "acquire_image_%s_%d_%d_%d.bin", timeStr, lHoriPix, lVertPix, pDlg->m_iAcqNum);
+					FILE	*fp = NULL;				
+					sprintf(name, "acquire_image_%d_%d_%d_%s.bin", lHoriPix, lVertPix, pDlg->m_iAcqNum, timeString);
 					fp = fopen(name,"wb");
 					if (fp) {
 						fwrite(pDlg->m_pTransBuffer, lHoriPix*lVertPix*pDlg->m_iAcqNum*2, 1, fp); //“ñ?§ŽÊ
@@ -530,7 +547,9 @@ VOID CALLBACK Cssdic_sampleDlg::CallbackAcquire( INT nEventNo, PVOID pArgData, P
 			
 				if (SSDIC_ERR_NONE == lRet) {
 					FILE	*fp = NULL;
-					fp = fopen("Acquire.csv", "wt");
+					memset(name,0, sizeof(name));
+					sprintf(name, "acquire_image_%d_%d_%d_%s.csv", lHoriPix, lVertPix, pDlg->m_iAcqNum, timeString);
+					fp = fopen(name, "wt");
 					if (fp) {
 						ULONG nIdx = 0;
 						for (ULONG nFrame = 0 ; nFrame < pDlg->m_iAcqNum ; nFrame++) {
@@ -545,6 +564,8 @@ VOID CALLBACK Cssdic_sampleDlg::CallbackAcquire( INT nEventNo, PVOID pArgData, P
 						fclose(fp);
 					}
 				}
+				CString temp(name);
+				pDlg->m_edtReceive.SetWindowText(temp);
 				pDlg->ButtonEnable(1);
 			}
 			break;
@@ -969,7 +990,7 @@ void Cssdic_sampleDlg::OnEnUpdateEditAcqnum()
 	// TODO:  Add your control notification handler code here
 	int old = m_iAcqNum;
 	UpdateData(TRUE);
-	if ((m_iAcqNum >= 1) && (m_iAcqNum < 100000 ))
+	if ((m_iAcqNum >= 1) && (m_iAcqNum <= 65000 ))
 	{
 		CString MyString;
 		MyString.Format(_T("set acquire num is %d"), m_iAcqNum);
@@ -978,7 +999,7 @@ void Cssdic_sampleDlg::OnEnUpdateEditAcqnum()
 	else
 	{
 		CString MyString;
-		MyString.Format(_T("acquire range is [0 100000]"));
+		MyString.Format(_T("acquire range is [1 65000]"));
 		MessageBox(MyString);
 		m_iAcqNum = old;
 		MyString.Format(_T("%d"), m_iAcqNum);
